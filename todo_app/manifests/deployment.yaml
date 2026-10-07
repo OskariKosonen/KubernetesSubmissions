@@ -16,7 +16,7 @@ spec:
         app: todo-app
     spec:
       containers:
-      - image: todo-app:1.2
+      - image: todo-app:1.5
         name: todo-app
         resources: {}
         env:
