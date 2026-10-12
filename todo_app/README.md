@@ -4,7 +4,7 @@ Flask web server for the course project. Serves an HTML page at `/` and prints `
 
 ## Cluster (k3d)
 
-The cluster needs host port 8082 mapped to NodePort 30080:
+The cluster needs host port 8081 mapped to the load balancer's port 80:
 
     k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2
 
@@ -19,10 +19,14 @@ Change the port: edit `PORT` in `manifests/deployment.yaml` and `targetPort` in 
 
 ## Access
 
-The NodePort Service `todo-app-svc` exposes the app on node port 30080, which k3d maps to http://localhost:8082.
+The app is reached through an Ingress at http://localhost:8081.
 
-    localhost:8082 → node:30080 (NodePort) → todo-app-svc → pod:8080
+    localhost:8081 → Ingress (Traefik, port 80) → todo-app-svc:1234 → pod:8080
 
-For debugging without the Service:
+The log output app's Ingress also uses `/`, so delete it before deploying this one:
+
+    kubectl delete ingress log-output-ingress
+
+For debugging without the Ingress:
 
     kubectl port-forward deployment/todo-app 3003:8080
