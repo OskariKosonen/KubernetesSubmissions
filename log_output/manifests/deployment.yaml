@@ -9,14 +9,14 @@ spec:
   selector:
     matchLabels:
       app: log-output
-  strategy: {}
   template:
     metadata:
       labels:
         app: log-output
     spec:
       containers:
-      - image: log-output:1.1
+      - image: log-output:1.7
         name: log-output
-        resources: {}
-status: {}
+        env:
+        - name: PORT
+          value: "3000"
