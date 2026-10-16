@@ -9,17 +9,23 @@ spec:
   selector:
     matchLabels:
       app: todo-app
-  strategy: {}
   template:
     metadata:
       labels:
         app: todo-app
     spec:
+      volumes:
+        - name: image-volume
+          persistentVolumeClaim:
+            claimName: todo-claim
       containers:
-      - image: todo-app:1.5
-        name: todo-app
-        resources: {}
-        env:
-        - name: PORT
-          value: "8080"
-status: {}
+        - image: todo-app:1.12
+          name: todo-app
+          env:
+            - name: PORT
+              value: "8080"
+            - name: IMAGE_MAX_AGE_SECONDS
+              value: "600"
+          volumeMounts:
+            - name: image-volume
+              mountPath: /usr/src/app/files

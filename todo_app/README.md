@@ -1,6 +1,12 @@
 # Todo app
 
-Flask web server for the course project. Serves an HTML page at `/` and prints `Server started in port NNNN` on startup. The port is set with the `PORT` environment variable (default 3000, set to 8080 in the manifest).
+Flask web server for the course project. Serves an HTML page at `/` with a random picture from [Lorem Picsum](https://picsum.photos), and prints `Server started in port NNNN` on startup. The port is set with the `PORT` environment variable (default 3000, set to 8080 in the manifest).
+
+## Image cache
+
+The picture is cached as `image.jpg` on a persistent volume (`todo-claim` from [volumes](../volumes)) mounted at `/usr/src/app/files`, so it survives container crashes. After `IMAGE_MAX_AGE_SECONDS` (default 600) the old picture is served one more time, and the next request downloads a new one.
+
+Test a crash with http://localhost:8081/shutdown (or `kubectl delete pod -l app=todo-app`); the same picture should be shown after the restart.
 
 ## Cluster (k3d)
 
@@ -10,8 +16,10 @@ The cluster needs host port 8081 mapped to the load balancer's port 80:
 
 ## Build and deploy
 
-    docker build -t todo-app:1.5 .
-    k3d image import todo-app:1.5
+    docker build -t todo-app:1.12 .
+    k3d image import todo-app:1.12
+    docker exec k3d-k3s-default-agent-0 sh -c "mkdir -p /tmp/kube-todo && chmod 777 /tmp/kube-todo"
+    kubectl apply -f ../volumes/
     kubectl apply -f manifests/
     kubectl logs -f deployment/todo-app
 
