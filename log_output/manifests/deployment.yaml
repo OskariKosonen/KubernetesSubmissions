@@ -14,9 +14,20 @@ spec:
       labels:
         app: log-output
     spec:
+      volumes:  # Define a shared volume for the containers
+        - name: log-volume
+          emptyDir: {}
       containers:
-      - image: log-output:1.7
-        name: log-output
-        env:
-        - name: PORT
-          value: "3000"
+        - name: log-output-writer
+          image: log-output-writer:1.10
+          volumeMounts: # Mount the shared volume in the writer container
+            - name: log-volume
+              mountPath: /usr/src/app/files
+        - name: log-output-reader
+          image: log-output-reader:1.10
+          env:
+            - name: PORT
+              value: "3000"
+          volumeMounts: # Mount the shared volume in the reader container
+            - name: log-volume
+              mountPath: /usr/src/app/files
