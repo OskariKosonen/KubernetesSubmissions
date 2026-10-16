@@ -19,7 +19,7 @@ spec:
           persistentVolumeClaim:
             claimName: todo-claim
       containers:
-        - image: todo-app:1.12
+        - image: todo-app:1.13
           name: todo-app
           env:
             - name: PORT

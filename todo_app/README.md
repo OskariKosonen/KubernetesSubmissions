@@ -16,8 +16,8 @@ The cluster needs host port 8081 mapped to the load balancer's port 80:
 
 ## Build and deploy
 
-    docker build -t todo-app:1.12 .
-    k3d image import todo-app:1.12
+    docker build -t todo-app:1.13 .
+    k3d image import todo-app:1.13
     docker exec k3d-k3s-default-agent-0 sh -c "mkdir -p /tmp/kube-todo && chmod 777 /tmp/kube-todo"
     kubectl apply -f ../volumes/
     kubectl apply -f manifests/

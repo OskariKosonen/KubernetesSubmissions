@@ -6,11 +6,30 @@
     <title>Todo App</title>
     <style>
         img { max-width: 100%; height: auto; }
+        input { width: 30em; max-width: 100%; }
     </style>
 </head>
 <body>
     <h1>Todo App</h1>
     <img src="/image?v={{ version }}" alt="Random picture from Lorem Picsum">
+
+    <form id="todo-form">
+        <input type="text" name="todo" maxlength="{{ max_length }}"
+               placeholder="New todo (max {{ max_length }} characters)" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <ul>
+        {% for todo in todos %}
+        <li>{{ todo }}</li>
+        {% endfor %}
+    </ul>
+
     <p>DevOps with Kubernetes 2026</p>
+
+    <script>
+        // Sending todos comes in a later exercise
+        document.getElementById("todo-form").addEventListener("submit", (e) => e.preventDefault());
+    </script>
 </body>
 </html>

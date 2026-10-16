@@ -13,6 +13,9 @@ IMAGE_PATH = os.path.join(FILE_DIR, "image.jpg")
 # Exists when the expired image has already been served its one extra time
 EXPIRED_MARKER = os.path.join(FILE_DIR, "expired_served")
 
+MAX_TODO_LENGTH = 140
+TODOS = ["Learn JavaScript", "Learn React", "Build a project"]
+
 app = Flask(__name__)
 image_lock = threading.Lock()
 
@@ -48,7 +51,7 @@ def ensure_image() -> None:
 def index():
     ensure_image()
     version = int(os.path.getmtime(IMAGE_PATH))
-    return render_template("index.html", version=version)
+    return render_template("index.html", version=version, todos=TODOS, max_length=MAX_TODO_LENGTH)
 
 
 @app.route("/image")
