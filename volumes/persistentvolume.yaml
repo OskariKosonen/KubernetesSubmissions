@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: shared-pv
+spec:
+  storageClassName: shared-pv # Not the default local-path class, so the claim binds to this volume
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce # Pods on the same node can share it
+  local:
+    path: /tmp/kube
+  nodeAffinity: # A local volume lives on one node, so pods using it are scheduled there
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3d-k3s-default-agent-0

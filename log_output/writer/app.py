@@ -18,7 +18,7 @@ def status() -> str:
 def log_loop() -> None:
     while True:
         line = status()
-        with open(FILE_PATH, "a") as f:
+        with open(FILE_PATH, "w") as f:
             f.write(line + "\n")
         print(line, flush=True)
         time.sleep(5)

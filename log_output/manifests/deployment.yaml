@@ -14,17 +14,18 @@ spec:
       labels:
         app: log-output
     spec:
-      volumes:  # Define a shared volume for the containers
+      volumes:  # Shared persistent volume, also used by ping-pong
         - name: log-volume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: shared-claim
       containers:
         - name: log-output-writer
-          image: log-output-writer:1.10
+          image: log-output-writer:1.11
           volumeMounts: # Mount the shared volume in the writer container
             - name: log-volume
               mountPath: /usr/src/app/files
         - name: log-output-reader
-          image: log-output-reader:1.10
+          image: log-output-reader:1.11
           env:
             - name: PORT
               value: "3000"
